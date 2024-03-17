@@ -7,7 +7,7 @@ from pytorch_lightning.callbacks import ModelCheckpoint
 
 from dataset.dataloader import build_dataset
 from model.patch_learning import ResNetClassifier
-from utils.stpm import STPM
+from model.stpm import STPM
 
 
 logger = logging.getLogger(__name__)
@@ -26,12 +26,12 @@ def str2bool(v):
 def config_hyperparameters():
     # Data generator params
     parser = argparse.ArgumentParser()
-    parser.add_argument("--run_mode", type=str, choices=['pretrain', 'train', 'eval', 'fmaps'], default='eval')
+    parser.add_argument("--run_mode", type=str, choices=['pretrain', 'train', 'eval', 'fmaps'], default='train')
     parser.add_argument("--batch_size", type=int, default=2)  # 8
     parser.add_argument("--out_img_size", type=int, default=[156, 156, 156])  # [144, 176, 128]
     parser.add_argument("--resample_fac", type=float, default=39/56) # 1
-    parser.add_argument("--n_data_workers", type=int, default=0) # 10
-    parser.add_argument("--data_dir", type=str, default="./data/{}")  # 2022_09_12_STPM3D
+    parser.add_argument("--n_data_workers", type=int, default=10) # 10
+    parser.add_argument("--data_dir", type=str, default="./data/{}")
     parser.add_argument("--net_type", type=str, choices=["RESNET", "CONVNET"], default="RESNET")
     parser.add_argument("--num_classes", type=int, default=128) # 128
     parser.add_argument("--resnet_version", type=int, choices=[18, 34, 50, 101, 152], default=18)
@@ -49,9 +49,9 @@ def config_hyperparameters():
 
     # STPM training params
     parser = argparse.ArgumentParser()
-    parser.add_argument("--n_epochs", type=int, default=64)  # 150
-    # parser.add_argument("--ckpt_path", default=None) #default="../results/2022_09_12_STPM3D/lightning_logs/version_10/checkpoints/last_epoch_teacher.ckpt", type=str)
-    parser.add_argument("--ckpt_path", default="./data/lightning_logs/version_11248/checkpoints/last_epoch_teacher.ckpt", type=str)
+    parser.add_argument("--n_epochs", type=int, default=20)  # 150
+    parser.add_argument("--ckpt_path", default=None)
+    # parser.add_argument("--ckpt_path", default="./data/lightning_logs/version_11248/checkpoints/last_epoch_teacher.ckpt", type=str)
     parser.add_argument('--amap_mode', choices=['mul', 'sum'], default='mul')
     parser.add_argument("--in_channels", type=int, default=1)
     args_stpm, _ = parser.parse_known_args()
@@ -159,7 +159,7 @@ def run_p_resnet(args_gen, args_resnet, args_stpm):
         log_every_n_steps=1,
         devices=[0],
         max_epochs=args_resnet.n_epochs,
-        strategy='ddp',
+        # strategy='ddp',
     )
     logger.debug("Trainer built.")
 
@@ -180,8 +180,8 @@ if __name__ == "__main__":
         run_stpm(args_gen, args_stpm)
     elif args_gen.run_mode == 'eval':
         from model.eval import run_eval
-        run_eval(KMEANS=False, MODE="CLASS", version=11249, ckpt='epoch=63-val_auroc=0.8710.ckpt')
-        run_eval(KMEANS=False, MODE="SEG", version=11249, ckpt='epoch=63-val_auroc=0.8710.ckpt')
+        run_eval(KMEANS=False, MODE="CLASS", version=11249, ckpt='epoch=63-val_auroc=0.8710.ckpt') # 11249 # epoch=63-val_auroc=0.8710.ckpt
+        run_eval(KMEANS=False, MODE="SEG", version=11249, ckpt='epoch=63-val_auroc=0.8710.ckpt') # 11249 # epoch=63-val_auroc=0.8710.ckpt
     elif args_gen.run_mode == 'fmaps':
         from model.fmaps import run_fmaps_student
         run_fmaps_student()

@@ -48,7 +48,7 @@ class MRIDatasetST(torch.utils.data.Dataset, SuperDataset):
         self.atlas = atlas
 
         pt_dataset = sk_utils.shuffle(pt_dataset, random_state=41)
-        label = 't1'
+        label = 't2'
         _pt_dataset = []
         for data_dict in tqdm.tqdm(pt_dataset):
             if label in data_dict and len(data_dict[label]) != 0:
@@ -75,8 +75,8 @@ class MRIDatasetST(torch.utils.data.Dataset, SuperDataset):
 
     def __getitem__(self, idx):
         data_dict = self.pt_dataset[idx]
-        if 't1' in data_dict and len(data_dict['t1']) != 0:
-            file = data_dict['t1'][0]
+        if 't2' in data_dict and len(data_dict['t2']) != 0:
+            file = data_dict['t2'][0]
         seg = data_dict["seg"]
 
         mri_img = tio.ScalarImage(file)

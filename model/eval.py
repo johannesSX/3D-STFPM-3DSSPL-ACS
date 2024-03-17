@@ -11,7 +11,7 @@ import torchmetrics as tom
 
 from sklearn import model_selection as sk_mselection
 from sklearn import cluster as sk_cluster
-from utils.stpm import STPM
+from model.stpm import STPM
 from run_stpm3D import config_hyperparameters
 from tqdm import tqdm
 from typing import List
@@ -367,7 +367,7 @@ def run_eval(KMEANS=False, MODE="SEG", version=11198, ckpt='last_epoch_student.c
     elif MODE == "SEG":
         # eval_brats = eval_brats[:10]
         dataset = MRIDatasetST(
-            eval_brats, #eval_brats[:10],
+            eval_brats,
             mean_hist_img,
             args_gen.out_img_size,
             training=False,

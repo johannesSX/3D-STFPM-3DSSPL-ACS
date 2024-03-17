@@ -20,7 +20,7 @@ def build_eval(path_to_json):
 def build_dataset(out_img_size, batch_size, n_data_workers, path_to_json, atlas, resample_fac, seq=None, seq_t1c=None, RESNET=False, STPM=False, EVAL=False):
     if RESNET:
         # mean_hist_img = np.load(path_to_json.format("/data_order/histogram_landmarks_t2_BRATS.npy"))
-        mean_hist_img = np.load(path_to_json.format("/data_order/histogram_landmarks_t1_BRATS.npy"))
+        mean_hist_img = np.load(path_to_json.format("/data_order/histogram_landmarks_t2_BRATS.npy"))
         with open(path_to_json.format("/data_order/train_teacher.json"), 'r') as fin: # train_teacher
             train = json.load(fin)
         with open(path_to_json.format("/data_order/val_teacher.json"), 'r') as fin: # val_teacher
@@ -60,7 +60,7 @@ def build_dataset(out_img_size, batch_size, n_data_workers, path_to_json, atlas,
         print("Length Teacher Test: {}".format(len(test_dataset_gen)))
 
     elif STPM:
-        mean_hist_img = np.load(path_to_json.format("/data_order/histogram_landmarks_t1_BRATS.npy"))
+        mean_hist_img = np.load(path_to_json.format("/data_order/histogram_landmarks_t2_BRATS.npy"))
         with open(path_to_json.format("/data_order/train_student.json"), 'r') as fin:
             train = json.load(fin)
         with open(path_to_json.format("/data_order/val_teacher.json"), 'r') as fin:

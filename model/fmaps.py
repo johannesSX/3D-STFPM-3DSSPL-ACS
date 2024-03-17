@@ -4,7 +4,7 @@ import pathlib
 import pytorch_lightning as pl
 
 from dataset.dataloader import build_dataset
-from utils.stpm import STPM
+from model.stpm import STPM
 from run_stpm3D import config_hyperparameters
 
 

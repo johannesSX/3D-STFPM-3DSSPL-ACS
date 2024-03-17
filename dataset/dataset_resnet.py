@@ -165,28 +165,28 @@ class MRIDatasetResnet(torch.utils.data.Dataset, SuperDataset):
             nib.save(_mri_img_2, '../results/2022_08_22_STPM3D/miao_2.nii.gz')
             nib.save(_atl_img_1, '../results/2022_08_22_STPM3D/miao_3.nii.gz')
 
-        resize_transform = tio.transforms.Resize(
-            target_shape=[
-                int(self.out_size[0] / self.resample_fac),
-                int(self.out_size[1] / self.resample_fac),
-                int(self.out_size[2] / self.resample_fac)
-            ]
-        )
+        # resize_transform = tio.transforms.Resize(
+        #     target_shape=[
+        #         int(self.out_size[0] / self.resample_fac),
+        #         int(self.out_size[1] / self.resample_fac),
+        #         int(self.out_size[2] / self.resample_fac)
+        #     ]
+        # )
 
-        img_a = [
-            resize_transform(img_a),
-            resize_transform(atl_a),
-        ]
-        img_p = [
-            resize_transform(img_p),
-            resize_transform(atl_p),
-        ]
-        img_n = [
-            resize_transform(img_n),
-            resize_transform(atl_n),
-        ]
+        # img_a = [
+        #     resize_transform(img_a),
+        #     resize_transform(atl_a),
+        # ]
+        # img_p = [
+        #     resize_transform(img_p),
+        #     resize_transform(atl_p),
+        # ]
+        # img_n = [
+        #     resize_transform(img_n),
+        #     resize_transform(atl_n),
+        # ]
 
-        return [img_a, img_p, img_n]
+        return [[img_a, atl_a], [img_p, atl_p], [img_n, atl_n]]
 
 
     def __init__(self, pt_dataset, mean_hist_img, out_size, resample_fac=2.75, training=False, atlas=False, seed=0):
@@ -201,7 +201,7 @@ class MRIDatasetResnet(torch.utils.data.Dataset, SuperDataset):
 
         pt_dataset = sk_utils.shuffle(pt_dataset, random_state=41)
 
-        label = 't1'
+        label = 't2'
         _pt_dataset = []
         for data_dict in tqdm.tqdm(pt_dataset):
             if label in data_dict and len(data_dict[label]) != 0:
@@ -224,8 +224,8 @@ class MRIDatasetResnet(torch.utils.data.Dataset, SuperDataset):
 
     def __getitem__(self, idx):
         data_dict = self.pt_dataset[idx]
-        if 't1' in data_dict and len(data_dict['t1']) != 0:
-            file = data_dict['t1'][0]
+        if 't2' in data_dict and len(data_dict['t2']) != 0:
+            file = data_dict['t2'][0]
         label_not_healthy = int(data_dict["not_healthy"][0])
 
         mri_seg = torch.zeros((1,
