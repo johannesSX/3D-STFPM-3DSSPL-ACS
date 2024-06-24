@@ -1,6 +1,6 @@
 # 3D Patch-based Student-Teacher Pyramid Matching in 3D Magnetic Resonance Imaging
 
-PyTorch lightning implementation of A [Patch-based Student-Teacher Pyramid Matching Approach to Anomaly Detection in 3D Magnetic Resonance Imaging](https://openreview.net/forum?id=vh01Nd5PCl&noteId=vh01Nd5PCl) (MIDL 2024 Submission).
+PyTorch lightning implementation of A [Patch-based Student-Teacher Pyramid Matching Approach to Anomaly Detection in 3D Magnetic Resonance Imaging](https://openreview.net/forum?id=vh01Nd5PCl&noteId=vh01Nd5PCl) (MIDL 2024).
 
 
 ## Getting Started
